@@ -7,11 +7,11 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('https://coolbackgrounds.io/images/backgrounds/index/ranger-4df6c1b6.png');
+    background: url('https://coolbackgrounds.io/images/backgrounds/index/ranger-4df6c1b6.png') no-repeat center center/cover;
 }
 
 .container {
-    background: rgba(253, 252, 252, 0.7);
+    background: rgba(253, 252, 252, 0.5);
     padding: 20px 40px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
