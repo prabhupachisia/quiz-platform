@@ -1,12 +1,5 @@
 /* styles.css */
-.body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+
 .container {
   background: rgba(253, 252, 252, 0.5);
   padding: 30px 50px;

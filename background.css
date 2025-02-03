@@ -3,4 +3,10 @@ body {
   background: linear-gradient(to right, #4facfe, #00f2fe);
   background: url("https://coolbackgrounds.io/images/backgrounds/index/ranger-4df6c1b6.png")
     no-repeat center center/cover;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
