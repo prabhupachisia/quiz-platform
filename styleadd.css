@@ -1,49 +1,40 @@
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-  }
-  body {
-    background: url('https://coolbackgrounds.io/images/backgrounds/index/ranger-4df6c1b6.png') no-repeat center center/cover;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .container {
-    background: rgba(253, 252, 252, 0.5);
-    padding: 30px;
-    border-radius: 10px;
-    text-align: center;
-    color: #333;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arial", sans-serif;
+}
+.container {
+  background: rgba(253, 252, 252, 0.5);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: #333;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
 
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    font-size: 18px;
-    color: white;
-    background: linear-gradient(45deg, #ff416c, #ff4b2b);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  button:hover {
-    background: linear-gradient(45deg, #ff4b2b, #ff416c);
-    transform: scale(1.05);
-  }
-  
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 18px;
+  color: white;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  transform: scale(1.05);
+}
