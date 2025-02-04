@@ -13,7 +13,7 @@
       <button onclick="showForm('user')">Login as User</button>
       <div class="login-box" id="admin-form" style="display: none">
         <h2>Admin Login</h2>
-        <form action="admin_dashboard.html" method="POST">
+        <form>
           <label for="admin-username">Username:</label>
           <input
             type="text"
@@ -30,12 +30,12 @@
             required
           />
 
-          <button type="submit">Login as Admin</button>
+          <button id="admin-submit" type="submit">Login as Admin</button>
         </form>
       </div>
       <div class="login-box" id="user-form" style="display: none">
         <h2>User Login</h2>
-        <form action="categories.html" method="POST">
+        <form>
           <label for="user-username">Username:</label>
           <input type="text" id="user-username" name="user-username" required />
 
@@ -47,21 +47,11 @@
             required
           />
 
-          <button type="submit">Login as User</button>
+          <button id="user-submit" type="submit">Login as User</button>
         </form>
       </div>
       <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
     </div>
-    <script>
-      function showForm(role) {
-        if (role === "admin") {
-          document.getElementById("admin-form").style.display = "block";
-          document.getElementById("user-form").style.display = "none";
-        } else {
-          document.getElementById("admin-form").style.display = "none";
-          document.getElementById("user-form").style.display = "block";
-        }
-      }
-    </script>
+    <script src="login.js"></script>
   </body>
 </html>
