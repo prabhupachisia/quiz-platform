@@ -17,6 +17,6 @@ adminsubmit.addEventListener("click", (event) => {
 
 usersubmit.addEventListener("click", (event) => {
     event.preventDefault();
-    window.location.href = "user.html";
+    window.location.href = "quiz/start.html";
 });
 

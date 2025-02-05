@@ -58,9 +58,6 @@
         width: 500px;
         align-content: center;
       }
-
-      /* Reduced top padding to bring content closer to the nav bar.
-         Retain bottom padding for space above the footer. */
       body {
         padding-top: 10px;
         padding-bottom: 80px;
@@ -68,33 +65,34 @@
         justify-content: center;
         height: 100vh;
         margin: 0;
-        overflow: auto;
+        overflow: hidden;
       }
-
       .content {
         display: flex;
         align-items: center;
-        gap: 50px;
+        gap: 80px;
       }
       .card {
         background: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
       }
       .image-card img {
-        width: 500px;
+        width: 400px;
         height: auto;
         border-radius: 10px;
       }
       .text-card {
         max-width: 500px;
+        max-height: 200px;
       }
 
       footer {
         background-color: #333;
         color: white;
         padding: 20px 0;
+        height: 100px;
         width: 100%;
         position: fixed;
         bottom: 0;
@@ -135,10 +133,7 @@
           over time. Whether you are preparing for an exam, improving general
           knowledge, or simply having fun, our platform provides an engaging and
           rewarding experience. Each quiz is designed by experts and features
-          intuitive interfaces for a smooth user experience. We also offer
-          leaderboards, performance tracking, and personalized recommendations
-          to enhance learning. Join our community today and start your journey
-          towards knowledge excellence!
+          intuitive interfaces for a smooth user experience.
         </p>
       </div>
     </div>
@@ -166,33 +161,7 @@
               >contact@quizplatform.com</a
             >
           </p>
-          <p>Phone: +1 (123) 456-7890</p>
-          <div class="social-media">
-            <a
-              href="https://www.facebook.com/quizplatform"
-              target="_blank"
-              style="color: white; margin-right: 10px"
-              ><i class="fa-brands fa-facebook"></i
-            ></a>
-            <a
-              href="https://www.twitter.com/quizplatform"
-              target="_blank"
-              style="color: white; margin-right: 10px"
-              ><i class="fa-brands fa-twitter"></i
-            ></a>
-            <a
-              href="https://www.instagram.com/quizplatform"
-              target="_blank"
-              style="color: white; margin-right: 10px"
-              ><i class="fa-brands fa-instagram"></i
-            ></a>
-            <a
-              href="https://www.linkedin.com/company/quizplatform"
-              target="_blank"
-              style="color: white; margin-right: 10px"
-              ><i class="fa-brands fa-linkedin"></i
-            ></a>
-          </div>
+          <p>Phone: +91 93456-57890</p>
         </div>
         <!-- Creators & Site Name -->
         <div class="footer-creators" style="text-align: right">
@@ -203,7 +172,7 @@
               href="https://www.yourwebsite.com"
               target="_blank"
               style="color: white; text-decoration: none"
-              >Your Company</a
+              >Quiz Platform Team</a
             >
           </p>
         </div>
