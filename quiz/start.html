@@ -1,0 +1,27 @@
+
+<!-- start.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Quiz</title>
+    <link id="themeStylesheet" rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>QUIZ</h1>
+        <button id = "switch" onclick="switchTheme()">Switch Theme</button>
+        <!-- Your content here -->
+        <script src="script.js"></script>
+    </header>
+    <p>Click below to start your quiz.</p>
+    <button id="startButton">Start Quiz</button>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', () => {
+            window.location.href = 'quiz.html'; // Redirect to the quiz page
+        });
+    </script>
+</body>
+</html>
