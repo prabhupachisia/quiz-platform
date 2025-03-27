@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import pic from "../Images/Logo.png";
-import click from "../Images/click.mp3";
 import DrawerComp from "./DrawerComp";
 import "./Navbar.css"; // Import the new CSS file for styling
 
@@ -23,21 +22,21 @@ const Navbar = () => {
               <Link
                 to="/"
                 className={activeTab === 0 ? "active" : ""}
-                onClick={() => { new Audio(click).play(); setActiveTab(0); }}
+                onClick={() => { setActiveTab(0); }}
               >Home</Link>
             </li>
             <li>
               <Link
                 to="/my-quiz"
                 className={activeTab === 1 ? "active" : ""}
-                onClick={() => { new Audio(click).play(); setActiveTab(1); }}
+                onClick={() => { setActiveTab(1); }}
               >My Quiz</Link>
             </li>
             <li>
               <Link
                 to="/play-quiz"
                 className={activeTab === 2 ? "active" : ""}
-                onClick={() => { new Audio(click).play(); setActiveTab(2); }}
+                onClick={() => { setActiveTab(2); }}
               >Play Quiz</Link>
             </li>
           </ul>

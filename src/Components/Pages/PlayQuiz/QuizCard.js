@@ -3,10 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAnswer } from "../../../Redux/Actions/Actions";
 import { useState } from "react";
 import { Button } from "@mui/material";
-import sound from "../../Images/sound1.wav";
 import Result from "./Result";
 import "./QuizCard.css";
-import option from "../../Images/option.mp3"
 
 function QuizCard() {
 
@@ -29,18 +27,16 @@ function QuizCard() {
     dispatch(getAnswer(finalAnswer));
     setDisable(true);
     if (count >= quiz.length - 1) {
-      new Audio(sound).play();
+
       setshowModal(true);
       setcount((prev) => prev);
     } else {
       setcount((prev) => prev + 1);
-      new Audio(option).play();
     }
   };
 
   //onClickHandler will run when option is clicked
   const onclickHandler = (el) => {
-    new Audio(option).play();
     getAnswerHandler(el.answer, el.correct, el.id);
     setDisable(false);
   };
@@ -116,7 +112,7 @@ function QuizCard() {
                   borderRadius: "5px",
                   boxShadow: "4px 4px 8px black",
                 }}
-             key={i}  >
+                key={i}  >
                 <p
                   style={{
                     margin: "0 10px",
@@ -124,7 +120,7 @@ function QuizCard() {
                     overflowWrap: "break-word",
                   }}
                 >
-                 
+
                   {el.answer}
                 </p>
               </div>
@@ -149,7 +145,7 @@ function QuizCard() {
                   disabled
                   variant="contained"
                   size="small"
-                  
+
                 >
                   Next Question
                 </Button>
