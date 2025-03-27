@@ -1,87 +1,49 @@
-import React from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import pic1 from "../Images/cretenew.png";
 import pic2 from "../Images/myquiz.png";
 import pic3 from "../Images/play.png";
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import './HomePage.css'; // Importing the CSS file
 
-//Home page component
 const HomePage = () => {
+  const [headLine, setHeadLine] = useState("WELCOME TO OUR WEBSITE");
 
-  const [headLine, setHeadLine] = useState(""); //for setting headline
-
-  //Change() for changing headline.
-  const change = () => {
-    headLine === "WELCOME TO OUR WEBSITE" ? setHeadLine("CREATE YOUR QUIZ AND PLAY") : setHeadLine("WELCOME TO OUR WEBSITE")
-  }
-
-  // settimeout() for calling change function every 2 seconds
-  setTimeout(() => {
-    change();
-  }, 2000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeadLine((prev) =>
+        prev === "WELCOME TO OUR WEBSITE" ? "CREATE YOUR QUIZ AND PLAY" : "WELCOME TO OUR WEBSITE"
+      );
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div style={{ marginTop: "100px" }}>
-      <h2 style={{ textAlign: "center", fontFamily: "sans-serif", letterSpacing: "5px" }}>{headLine}</h2>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }}>
+    <div className="homepage-container">
+      <h2 className="headline">{headLine}</h2>
+      <div className="card-container">
+        <Link to="/create-new" className="card">
+          <img src={pic1} alt="Create quiz" />
+          <div className="card-content">
+            <h3>Create your quiz by clicking here!</h3>
+          </div>
+        </Link>
 
-        {/** Created three cards using Material UI */}
-        <Card sx={{ maxWidth: 350, marginTop: "20px", textDecoration: "none", borderRadius: "20px", boxShadow: "2px 2px 4px black" }} component={Link} to={"/create-new"} >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              image={pic1}
-              alt="create quiz"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="div" sx={{ textAlign: "center", fontFamily: "sans-serif" }}>
-                Create your quiz by clicking here!
-              </Typography>
+        <Link to="/my-quiz" className="card">
+          <img src={pic2} alt="My quiz" />
+          <div className="card-content">
+            <h3>Click here to see your quizzes!</h3>
+          </div>
+        </Link>
 
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Card sx={{ maxWidth: 350, marginTop: "20px", textDecoration: "none", borderRadius: "20px", boxShadow: "2px 2px 4px black" }} component={Link} to={"/my-quiz"} >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              image={pic2}
-              alt="my quiz"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="div" sx={{ textAlign: "center", fontFamily: "sans-serif" }}>
-                Click here to see your quizzes!
-              </Typography>
-
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Card sx={{ maxWidth: 350, marginTop: "20px", textDecoration: "none", borderRadius: "20px", boxShadow: "2px 2px 4px black" }} component={Link} to={"/play-quiz"} >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              image={pic3}
-              alt="play quiz"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="div" sx={{ textAlign: "center", fontFamily: "sans-serif" }}>
-                Start playing quiz by clicking here!
-              </Typography>
-
-            </CardContent>
-          </CardActionArea>
-        </Card>
+        <Link to="/play-quiz" className="card">
+          <img src={pic3} alt="Play quiz" />
+          <div className="card-content">
+            <h3>Start playing quiz by clicking here!</h3>
+          </div>
+        </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

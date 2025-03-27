@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import pic from "../Images/Logo.png";
+import pic from "../Images/logo.jpg";
 import DrawerComp from "./DrawerComp";
 import "./Navbar.css"; // Import the new CSS file for styling
 
