@@ -28,7 +28,8 @@
   gap: 10px;
 }
 
-.upper input {
+.upper input,
+select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;

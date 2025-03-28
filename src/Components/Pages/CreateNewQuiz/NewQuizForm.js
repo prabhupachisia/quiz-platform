@@ -7,6 +7,9 @@ import "./NewQuizForm.css";
 const NewQuizForm = () => {
   const titleRef = useRef();
   const descriptionRef = useRef();
+  const categoryRef = useRef();
+  const difficultyRef = useRef();
+  const timerRef = useRef();
   const questionRef = useRef();
   const answerRef = useRef();
   const CorrectAnswerRef = useRef();
@@ -77,14 +80,23 @@ const NewQuizForm = () => {
 
   const onSaveHandler = (event) => {
     event.preventDefault();
-    if (titleRef.current.value === "" || descriptionRef.current.value === "")
-      return alert("Enter title and description");
+    if (
+      titleRef.current.value === "" ||
+      descriptionRef.current.value === "" ||
+      categoryRef.current.value === "" ||
+      difficultyRef.current.value === "" ||
+      timerRef.current.value === ""
+    )
+      return alert("Enter all fields (Title, Description, Category, Difficulty, Timer)");
     if (question.length === 0) return alert("Add questions!");
 
     const Quiz = {
-      description: descriptionRef.current.value,
-      questions: question,
       title: titleRef.current.value,
+      description: descriptionRef.current.value,
+      category: categoryRef.current.value,
+      difficulty: difficultyRef.current.value,
+      timer: parseInt(timerRef.current.value, 10),
+      questions: question,
       id: Math.random(),
       createdOn: new Date(),
       isActive: true,
@@ -94,6 +106,9 @@ const NewQuizForm = () => {
     setCount(1);
     titleRef.current.value = "";
     descriptionRef.current.value = "";
+    categoryRef.current.value = "";
+    difficultyRef.current.value = "";
+    timerRef.current.value = "";
     navigate("/play-quiz");
   };
 
@@ -113,6 +128,14 @@ const NewQuizForm = () => {
             <div className="upper">
               <input type="text" placeholder="Title" className="title" ref={titleRef} required />
               <input type="text" className="description" placeholder="Add Description" ref={descriptionRef} required />
+              <input type="text" className="category" placeholder="Category" ref={categoryRef} required />
+              <select className="difficulty title" ref={difficultyRef} required>
+                <option value="">Select Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+              <input type="number" className="timer title" placeholder="Timer (seconds)" ref={timerRef} required />
             </div>
 
             <div className="QA">
