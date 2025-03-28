@@ -20,22 +20,16 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.get('/users.json');
-      let users = response.data.users;
+      // Send signup request to Express backend
+      const response = await axios.post('http://localhost:5000/api/signup', {
+        username,
+        password
+      });
 
-      if (users.some(u => u.username === username)) {
-        setError('Username already exists');
-        return;
-      }
-
-      const newUser = { username, password };
-      users.push(newUser);
-
-      await axios.put('/users.json', { users });
-      navigate('/login');
+      alert(response.data.message); // Show success message
+      navigate('/login'); // Redirect to login page
     } catch (err) {
-      setError('Sign up failed. Please try again.');
-      console.error(err);
+      setError(err.response?.data?.error || 'Sign up failed. Please try again.');
     }
   };
 

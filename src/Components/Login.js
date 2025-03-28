@@ -14,22 +14,21 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.get('/users.json');
-      const users = response.data.users;
-      const user = users.find(u => u.username === username && u.password === password);
+      const response = await axios.post('http://localhost:5000/api/login', {
+        username,
+        password,
+      });
 
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        navigate('/');
-      } else {
-        setError('Invalid username or password');
-      }
+      // Store token in localStorage
+      localStorage.setItem('token', response.data.token);
+
+      // Redirect to home page
+      navigate('/');
     } catch (err) {
-      setError('Login failed. Please try again.');
-      console.error(err);
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
     }
   };
-
+  
   return (
     <div id="login-container" className="login-container">
       <div id="login-box" className="login-box">
