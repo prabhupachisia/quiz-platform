@@ -13,35 +13,22 @@ const SignUp = () => {
     e.preventDefault();
     setError('');
 
-    // Basic validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     try {
-      // Fetch existing users
-      const response = await axios.get('/users.json');
-      let users = response.data.users;
+      // Send signup request to Express backend
+      const response = await axios.post('http://localhost:5000/api/signup', {
+        username,
+        password
+      });
 
-      // Check if username already exists
-      if (users.some(u => u.username === username)) {
-        setError('Username already exists');
-        return;
-      }
-
-      // Add new user
-      const newUser = { username, password };
-      users.push(newUser);
-
-      // Save updated users back to file
-      await axios.put('/users.json', { users });
-
-      // Navigate to login
-      navigate('/login');
+      alert(response.data.message); // Show success message
+      navigate('/login'); // Redirect to login page
     } catch (err) {
-      setError('Sign up failed. Please try again.');
-      console.error(err);
+      setError(err.response?.data?.error || 'Sign up failed. Please try again.');
     }
   };
 
@@ -56,8 +43,8 @@ const SignUp = () => {
         )}
         <form onSubmit={handleSignUp}>
           <div className="mb-4">
-            <label 
-              htmlFor="username" 
+            <label
+              htmlFor="username"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Username
@@ -72,8 +59,8 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-4">
-            <label 
-              htmlFor="password" 
+            <label
+              htmlFor="password"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Password
@@ -88,8 +75,8 @@ const SignUp = () => {
             />
           </div>
           <div className="mb-6">
-            <label 
-              htmlFor="confirmPassword" 
+            <label
+              htmlFor="confirmPassword"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
               Confirm Password

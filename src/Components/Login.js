@@ -13,26 +13,18 @@ const Login = () => {
     setError('');
 
     try {
-      // Attempt to fetch users
-      const response = await axios.get('/users.json');
-      const users = response.data.users;
+      const response = await axios.post('http://localhost:5000/api/login', {
+        username,
+        password,
+      });
 
-      // Check if user exists
-      const user = users.find(
-        u => u.username === username && u.password === password
-      );
+      // Store token in localStorage
+      localStorage.setItem('token', response.data.token);
 
-      if (user) {
-        // Store user info in localStorage
-        localStorage.setItem('user', JSON.stringify(user));
-        // Redirect to home page
-        navigate('/');
-      } else {
-        setError('Invalid username or password');
-      }
+      // Redirect to home page
+      navigate('/');
     } catch (err) {
-      setError('Login failed. Please try again.');
-      console.error(err);
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
     }
   };
 
@@ -51,10 +43,7 @@ const Login = () => {
         )}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label 
-              htmlFor="username" 
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
               Username
             </label>
             <input
@@ -67,10 +56,7 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label 
-              htmlFor="password" 
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
               Password
             </label>
             <input
@@ -83,17 +69,10 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col space-y-4">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
               Sign In
             </button>
-            <button
-              type="button"
-              onClick={navigateToSignUp}
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
+            <button type="button" onClick={navigateToSignUp} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
               Sign Up
             </button>
           </div>
