@@ -4,6 +4,9 @@
     align-items: center;
     height: 100vh;
     background: linear-gradient(to right, #ff7e5f, #feb47b);
+    padding: 20px;
+    /* Prevents overflow on smaller screens */
+    box-sizing: border-box;
 }
 
 .signup-box {
@@ -11,8 +14,11 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
+    /* Ensures it doesn't stretch too wide */
     text-align: center;
+    box-sizing: border-box;
 }
 
 .signup-box h2 {
@@ -29,12 +35,14 @@
 }
 
 .signup-box input {
-    width: 100%;
+    width: calc(100% - 24px);
+    /* Ensures input stays within the container */
     padding: 12px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .signup-box button {
@@ -46,9 +54,6 @@
     cursor: pointer;
     font-size: 16px;
     transition: 0.3s;
-}
-
-.signup-box button {
     background-color: #ff4500;
     color: white;
 }
