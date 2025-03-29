@@ -110,7 +110,13 @@ const NewQuizForm = () => {
             <div className="upper">
               <input type="text" placeholder="Title" ref={titleRef} required />
               <input type="text" placeholder="Description" ref={descriptionRef} required />
-              <input type="text" placeholder="Category" ref={categoryRef} required />
+              <select ref={categoryRef} required>
+                <option value="">Select Category</option>
+                <option value="Comp Sciences">Computer Sciences</option>
+                <option value="Animals">Animals</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruits">Fruits</option>
+              </select>
               <select ref={difficultyRef} required>
                 <option value="">Select Difficulty</option>
                 <option value="Easy">Easy</option>

@@ -8,6 +8,9 @@ const MyQuiz = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("All");
 
   const handleDelete = (id) => {
     setDeleteID(id);
@@ -25,13 +28,55 @@ const MyQuiz = () => {
 
   const Quiz = useSelector((state) => state.reducer.quiz);
 
+  const categories = ["All", ...new Set(Quiz.map((quiz) => quiz.category))];
+  const difficulties = ["All", ...new Set(Quiz.map((quiz) => quiz.difficulty))];
+
+  const filteredQuizzes = Quiz.filter(
+    (quiz) =>
+      (selectedCategory === "All" || quiz.category === selectedCategory) &&
+      (selectedDifficulty === "All" || quiz.difficulty === selectedDifficulty) &&
+      quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="quiz-container">
       <div className="header">
-        <h2>MY QUIZ</h2><br />
+        <h2>MY QUIZ</h2>
         <Link to="/create-new" className="create-btn">
           Create New Quiz
         </Link>
+      </div>
+
+      <div className="filter-container">
+        <input
+          type="text"
+          placeholder="Search by quiz title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="category-select"
+        >
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedDifficulty}
+          onChange={(e) => setSelectedDifficulty(e.target.value)}
+          className="difficulty-select"
+        >
+          {difficulties.map((difficulty, index) => (
+            <option key={index} value={difficulty}>
+              {difficulty}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Delete Confirmation Modal */}
@@ -50,24 +95,28 @@ const MyQuiz = () => {
 
       {/* Quiz List */}
       <div className="quiz-table-container">
-        {Quiz.length === 0 ? (
-          <p className="no-quiz-msg">Currently, there are no quizzes available.</p>
+        {filteredQuizzes.length === 0 ? (
+          <p className="no-quiz-msg">No quizzes found.</p>
         ) : (
           <table className="quiz-table">
             <thead>
               <tr>
                 <th>Quiz No.</th>
                 <th>Title</th>
+                <th>Category</th>
+                <th>Difficulty</th>
                 <th>Status</th>
                 <th>Created On</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {Quiz.map((quiz, index) => (
+              {filteredQuizzes.map((quiz, index) => (
                 <tr key={quiz.id}>
                   <td>{index + 1}</td>
                   <td className="quiz-title">{quiz.title}</td>
+                  <td>{quiz.category}</td>
+                  <td>{quiz.difficulty}</td>
                   <td>
                     <button
                       className={`status-btn ${quiz.isActive ? "active" : "inactive"}`}
