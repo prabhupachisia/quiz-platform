@@ -129,7 +129,7 @@ select {
 }
 
 .option button {
-  background: red;
+  background: rgb(227, 136, 136);
   color: white;
   border: none;
   padding: 5px 10px;
