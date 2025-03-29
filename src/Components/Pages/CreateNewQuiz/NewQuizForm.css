@@ -55,6 +55,12 @@ select {
   font-size: 16px;
 }
 
+.success {
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
 /* Answer Input & Checkbox */
 .answerSection {
   margin-top: 10px;
@@ -82,6 +88,15 @@ select {
 }
 
 .checkBox button {
+  background: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.addques {
   background: #007bff;
   color: white;
   padding: 8px 12px;
@@ -122,6 +137,15 @@ select {
   cursor: pointer;
 }
 
+.correct {
+  background: #32a84e;
+  color: white;
+}
+
+.wrong {
+  background: #D1D1D1;
+}
+
 /* Question Button */
 .questionBtn {
   margin-top: 20px;
@@ -157,4 +181,32 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background: #0056b3;
+}
+
+/* Added Questions List */
+.questionList {
+  margin-top: 20px;
+  padding: 10px;
+  background: #eef5ff;
+  border-radius: 10px;
+}
+
+.questionList h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.questionList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.questionItem {
+  padding: 10px;
+  margin: 5px 0;
+  background: #d6e4ff;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
 }

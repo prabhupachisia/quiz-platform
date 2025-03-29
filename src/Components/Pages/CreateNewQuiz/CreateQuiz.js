@@ -22,5 +22,4 @@ const CreateQuiz = () => {
     </div>
   );
 };
-
 export default CreateQuiz;
