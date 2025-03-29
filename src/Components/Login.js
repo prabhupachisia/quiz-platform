@@ -28,7 +28,7 @@ const Login = () => {
       setError(err.response?.data?.error || 'Login failed. Please try again.');
     }
   };
-  
+
   return (
     <div id="login-container" className="login-container">
       <div id="login-box" className="login-box">
@@ -37,7 +37,7 @@ const Login = () => {
         <form onSubmit={handleLogin} id="login-form">
           <input id="login-username" type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
           <input id="login-password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button id="login-submit" type="submit">Sign In</button>
+          <button id="login-submit" type="submit" onClick={handleLogin}>Sign In</button>
           <button id="login-signup" type="button" onClick={() => navigate('/signup')}>Sign Up</button>
         </form>
       </div>
