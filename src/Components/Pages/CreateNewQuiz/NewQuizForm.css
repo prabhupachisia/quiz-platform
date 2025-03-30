@@ -60,89 +60,53 @@ select {
   margin-top: 5px;
 }
 
-/* Answer Input & Checkbox */
-.answerSection {
-  margin-top: 10px;
+/* Answer Input Section */
+.answerInputs {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
+  margin-top: 10px;
 }
 
-.answerSection input.answer {
-  flex: 1;
+.answerInputs input {
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
 }
 
-.checkBox {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+/* Correct Answer Selection */
+.correctAnswerSelection {
+  margin-top: 10px;
 }
 
-.checkBox input[type="checkbox"] {
-  transform: scale(1.2);
+.correctAnswerSelection label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
-.checkBox button {
-  background: #007bff;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.addques {
-  background: #007bff;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.checkBox button:hover {
-  background: #0056b3;
-}
-
-/* Answer Options Display */
-.viewAnswer {
-  margin-top: 20px;
-}
-
-.option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.correctAnswerSelection select {
   padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  margin-bottom: 5px;
-}
-
-.option p {
-  margin: 0;
   font-size: 16px;
 }
 
-.option button {
-  background: rgb(227, 136, 136);
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
+/* Options Field */
+.optionsField {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.correct {
-  background: #32a84e;
-  color: white;
-}
-
-.wrong {
-  background: #D1D1D1;
+.optionsField input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 /* Question Button */
@@ -208,4 +172,19 @@ button[type="submit"]:hover {
   border-radius: 5px;
   font-size: 16px;
   color: #333;
+}
+
+.answerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.answerSection input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }

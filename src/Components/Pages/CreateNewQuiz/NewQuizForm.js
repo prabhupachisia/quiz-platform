@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addQuiz } from "../../../Redux/Actions/Actions";
 import "./NewQuizForm.css";
+import axios from "axios"; // Import Axios
 
 const NewQuizForm = () => {
   const titleRef = useRef();
@@ -11,13 +12,11 @@ const NewQuizForm = () => {
   const difficultyRef = useRef();
   const timerRef = useRef();
   const questionRef = useRef();
-  const answerRef = useRef();
-  const CorrectAnswerRef = useRef();
+  const optionRefs = [useRef(), useRef(), useRef(), useRef()];
+  const correctOptionRef = useRef();
 
   const [count, setCount] = useState(1);
   const [added, setAdded] = useState(false);
-  const [answerDone, setAnswerDone] = useState(false);
-  const [answers, setAnswers] = useState([]);
   const [questions, setQuestions] = useState([]);
 
   const dispatch = useDispatch();
@@ -25,47 +24,39 @@ const NewQuizForm = () => {
 
   useEffect(() => {
     const addedTimeout = setTimeout(() => setAdded(false), 2000);
-    const answerDoneTimeout = setTimeout(() => setAnswerDone(false), 2000);
-    return () => {
-      clearTimeout(addedTimeout);
-      clearTimeout(answerDoneTimeout);
-    };
-  }, [added, answerDone]);
-
-  const addOptionHandler = (event) => {
-    event.preventDefault();
-    if (answerRef.current.value === "" || answers.length >= 4) return;
-
-    const newAnswer = {
-      answer: answerRef.current.value,
-      correct: CorrectAnswerRef.current.checked,
-      id: Math.random(),
-    };
-
-    setAnswers((prev) => [...prev, newAnswer]);
-    answerRef.current.value = "";
-    CorrectAnswerRef.current.checked = false;
-  };
+    return () => clearTimeout(addedTimeout);
+  }, [added]);
 
   const addQuestionHandler = (e) => {
     e.preventDefault();
-    if (questionRef.current.value.length < 10 || answers.length < 2) return;
+    if (questionRef.current.value.length < 10) return;
+
+    const options = optionRefs.map((ref) => ref.current.value.trim());
+    if (options.some((opt) => opt === "")) return;
+
+    const correctIndex = parseInt(correctOptionRef.current.value, 10);
+    if (isNaN(correctIndex)) return;
 
     const newQuestion = {
       question: questionRef.current.value,
-      answers: answers,
+      answers: options.map((answer, index) => ({
+        answer,
+        correct: index + 1 === correctIndex,
+      })),
       id: count,
     };
 
     setCount(count + 1);
     setAdded(true);
     setQuestions((prev) => [...prev, newQuestion]);
-    setAnswers([]);
     questionRef.current.value = "";
+    optionRefs.forEach((ref) => (ref.current.value = ""));
+    correctOptionRef.current.value = "";
   };
 
-  const onSaveHandler = (event) => {
+  const onSaveHandler = async (event) => {
     event.preventDefault();
+
     if (
       !titleRef.current.value ||
       !descriptionRef.current.value ||
@@ -77,26 +68,33 @@ const NewQuizForm = () => {
       return alert("Enter all fields and add questions!");
     }
 
+    // Prepare quiz data with questions
     const newQuiz = {
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       category: categoryRef.current.value,
       difficulty: difficultyRef.current.value,
-      timer: parseInt(timerRef.current.value, 10),
-      questions: questions,
-      id: Math.random(),
-      createdOn: new Date(),
-      isActive: true,
+      duration: parseInt(timerRef.current.value, 10),
+      questions: questions.map((q) => ({
+        question: q.question,
+        option1: q.answers[0].answer,
+        option2: q.answers[1].answer,
+        option3: q.answers[2].answer,
+        option4: q.answers[3].answer,
+        answer: q.answers.findIndex((ans) => ans.correct) + 1, // Convert true/false to index
+      })),
     };
 
-    dispatch(addQuiz(newQuiz));
-    setCount(1);
-    titleRef.current.value = "";
-    descriptionRef.current.value = "";
-    categoryRef.current.value = "";
-    difficultyRef.current.value = "";
-    timerRef.current.value = "";
-    navigate("/play-quiz");
+    try {
+      // Send all quiz data in one request
+      await axios.post("http://localhost:5000/api/quizzes", newQuiz);
+
+      alert("Quiz created successfully!");
+      navigate("/play-quiz");
+    } catch (error) {
+      console.error("Error creating quiz:", error);
+      alert("Failed to create quiz. Please try again.");
+    }
   };
 
   return (
@@ -112,10 +110,13 @@ const NewQuizForm = () => {
               <input type="text" placeholder="Description" ref={descriptionRef} required />
               <select ref={categoryRef} required>
                 <option value="">Select Category</option>
-                <option value="Comp Sciences">Computer Sciences</option>
-                <option value="Animals">Animals</option>
-                <option value="Vegetables">Vegetables</option>
-                <option value="Fruits">Fruits</option>
+                <option value="Math">Math</option>
+                <option value="Science">Science</option>
+                <option value="History">History</option>
+                <option value="Geography">Geography</option>
+                <option value="Literature">Literature</option>
+                <option value="Art">Art</option>
+                <option value="Technology">Technology</option>
               </select>
               <select ref={difficultyRef} required>
                 <option value="">Select Difficulty</option>
@@ -133,21 +134,22 @@ const NewQuizForm = () => {
             </div>
 
             <div className="answerSection">
-              <input type="text" placeholder="Enter options" ref={answerRef} className="answer" />
-              <div className="checkBox">
-                <input type="checkbox" ref={CorrectAnswerRef} />
-                <label>Correct</label>
-                <button onClick={addOptionHandler}>Add Option</button>
-              </div>
-            </div>
-
-            <div className="viewAnswer">
-              {answers.map((el, i) => (
-                <div className={`option ${el.correct ? "correct" : "wrong"}`} key={el.id}>
-                  <p>{el.answer}</p>
-                  <button onClick={() => setAnswers(answers.filter(a => a.id !== el.id))}>❌</button>
-                </div>
+              {optionRefs.map((ref, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  placeholder={`Option ${index + 1}`}
+                  ref={ref}
+                  required
+                />
               ))}
+              <select ref={correctOptionRef} required>
+                <option value="">Select Correct Option</option>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+                <option value="4">Option 4</option>
+              </select>
             </div>
 
             <button onClick={addQuestionHandler} className="addques">Add Question</button>

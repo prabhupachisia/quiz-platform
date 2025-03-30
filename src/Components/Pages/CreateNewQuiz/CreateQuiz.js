@@ -7,18 +7,7 @@ const CreateQuiz = () => {
 
   return (
     <div style={{ marginTop: "100px" }}>
-      {popup ? (
-        <NewQuizForm />
-      ) : (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Select Question Type</h2>
-            <button className="modal-btn" onClick={() => setPopup(true)}>
-              MCQ (Single Correct)
-            </button>
-          </div>
-        </div>
-      )}
+      <NewQuizForm />
     </div>
   );
 };
