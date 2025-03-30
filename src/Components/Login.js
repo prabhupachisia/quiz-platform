@@ -11,7 +11,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("Teacher");
+  const [role, setRole] = useState("teacher");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -25,15 +25,22 @@ const Login = () => {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.tokens.access.token);
-      navigate("/");
+
+      // Extract user and tokens from the response
+      const { user, tokens } = response.data;
+
+      // Store user info along with tokens in localStorage
+      localStorage.setItem("accessToken", tokens.access.token);
+      localStorage.setItem("refreshToken", tokens.refresh.token);
+      localStorage.setItem("user", JSON.stringify(user)); // Store user data as string
+
+      navigate("/"); // Redirect to homepage
     } catch (err) {
       setError(err.response?.data?.error || "Login failed. Please try again.");
     }
   };
 
   const handleSignUp = async (e) => {
-    setAction("Sign Up");
     e.preventDefault();
     setError("");
 
@@ -46,12 +53,29 @@ const Login = () => {
 
     try {
       const response = await axios.post("http://localhost:5000/v1/auth/register", userData);
-      alert(response.data.message);
-      navigate("/login");
+
+      if (response.data) {
+        const { user, tokens } = response.data;
+
+        // Ensure tokens exist before storing
+        if (tokens && tokens.access && tokens.refresh) {
+          localStorage.setItem("accessToken", tokens.access.token);
+          localStorage.setItem("refreshToken", tokens.refresh.token);
+          localStorage.setItem("user", JSON.stringify(user));
+
+          navigate("/"); // Redirect to homepage
+        } else {
+          throw new Error("Signup successful, but no tokens received.");
+        }
+      } else {
+        throw new Error("Signup response is empty.");
+      }
     } catch (err) {
-      setError(err.response?.data?.error || "Sign up failed. Please try again.");
+      setError(err.response?.data?.message || "Sign up failed. Please try again.");
     }
   };
+
+
 
   return (
     <div className="container">

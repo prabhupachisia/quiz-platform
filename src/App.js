@@ -11,11 +11,12 @@ import QuizCard from './Components/Pages/PlayQuiz/QuizCard';
 import Login from './Components/Login';
 import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
 
-// Authentication wrapper component
 const PrivateRoute = ({ children }) => {
-  const user = localStorage.getItem('user');
-  return user ? children : <Navigate to="/login" />;
+  const user = JSON.parse(localStorage.getItem("user")); // Retrieve user info
+
+  return user ? children : <Navigate to="/login" replace />;
 };
+
 
 function App() {
   return (
