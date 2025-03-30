@@ -188,3 +188,57 @@ button[type="submit"]:hover {
   border-radius: 5px;
   font-size: 16px;
 }
+
+.questionItem button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.questionItem button {
+  padding: 8px 12px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.edit {
+  background-color: #2bb842;
+  color: white;
+}
+
+.edit:hover {
+  background-color: #e9a032;
+}
+
+.delete {
+  background-color: #d9534f;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #c9302c;
+}
+
+.questionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.questionItem .btn {
+  margin-left: 8px;
+}
+
+.questionItem .edit,
+.questionItem .delete {
+  margin-left: auto;
+}

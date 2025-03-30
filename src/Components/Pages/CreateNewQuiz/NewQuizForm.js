@@ -18,6 +18,7 @@ const NewQuizForm = () => {
   const [count, setCount] = useState(1);
   const [added, setAdded] = useState(false);
   const [questions, setQuestions] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,12 +47,34 @@ const NewQuizForm = () => {
       id: count,
     };
 
-    setCount(count + 1);
+    if (editingIndex !== null) {
+      const updatedQuestions = [...questions];
+      updatedQuestions[editingIndex] = newQuestion;
+      setQuestions(updatedQuestions);
+      setEditingIndex(null);
+    } else {
+      setCount(count + 1);
+      setQuestions((prev) => [...prev, newQuestion]);
+    }
+
     setAdded(true);
-    setQuestions((prev) => [...prev, newQuestion]);
     questionRef.current.value = "";
     optionRefs.forEach((ref) => (ref.current.value = ""));
     correctOptionRef.current.value = "";
+  };
+
+  const deleteQuestionHandler = (index) => {
+    setQuestions(questions.filter((_, i) => i !== index));
+  };
+
+  const editQuestionHandler = (index) => {
+    const questionToEdit = questions[index];
+    questionRef.current.value = questionToEdit.question;
+    questionToEdit.answers.forEach((answer, i) => {
+      optionRefs[i].current.value = answer.answer;
+    });
+    correctOptionRef.current.value = questionToEdit.answers.findIndex((ans) => ans.correct) + 1;
+    setEditingIndex(index);
   };
 
   const onSaveHandler = async (event) => {
@@ -68,7 +91,6 @@ const NewQuizForm = () => {
       return alert("Enter all fields and add questions!");
     }
 
-    // Prepare quiz data with questions
     const newQuiz = {
       title: titleRef.current.value,
       description: descriptionRef.current.value,
@@ -81,14 +103,12 @@ const NewQuizForm = () => {
         option2: q.answers[1].answer,
         option3: q.answers[2].answer,
         option4: q.answers[3].answer,
-        answer: q.answers.findIndex((ans) => ans.correct) + 1, // Convert true/false to index
+        answer: q.answers.findIndex((ans) => ans.correct) + 1,
       })),
     };
 
     try {
-      // Send all quiz data in one request
-      await axios.post("http://localhost:5000/v1/quiz/createQuiz", newQuiz);
-
+      await axios.post("http://localhost:5000/api/quizzes", newQuiz);
       alert("Quiz created successfully!");
       navigate("/play-quiz");
     } catch (error) {
@@ -135,12 +155,7 @@ const NewQuizForm = () => {
 
             <div className="answerSection">
               {optionRefs.map((ref, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  placeholder={`Option ${index + 1}`}
-                  ref={ref}
-                />
+                <input key={index} type="text" placeholder={`Option ${index + 1}`} ref={ref} />
               ))}
               <select ref={correctOptionRef}>
                 <option value="">Select Correct Option</option>
@@ -151,7 +166,7 @@ const NewQuizForm = () => {
               </select>
             </div>
 
-            <button onClick={addQuestionHandler} className="addques">Add Question</button>
+            <button onClick={addQuestionHandler} className="addques">{editingIndex !== null ? "Update Question" : "Add Question"}</button>
             <hr />
             <button type="submit">Submit</button>
           </form>
@@ -159,9 +174,13 @@ const NewQuizForm = () => {
           <div className="questionList">
             <h3>Added Questions:</h3>
             <ul>
-              {questions.map((q) => (
+              {questions.map((q, index) => (
                 <li key={q.id} className="questionItem">
-                  {q.question}
+                  <span>{q.question}</span>
+                  <div className="btn-container">
+                    <button className="btn edit" onClick={() => editQuestionHandler(index)}>Edit</button>
+                    <button className="btn delete" onClick={() => deleteQuestionHandler(index)}>Delete</button>
+                  </div>
                 </li>
               ))}
             </ul>
