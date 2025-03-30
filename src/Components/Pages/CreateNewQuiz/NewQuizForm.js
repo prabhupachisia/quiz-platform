@@ -140,10 +140,9 @@ const NewQuizForm = () => {
                   type="text"
                   placeholder={`Option ${index + 1}`}
                   ref={ref}
-                  required
                 />
               ))}
-              <select ref={correctOptionRef} required>
+              <select ref={correctOptionRef}>
                 <option value="">Select Correct Option</option>
                 <option value="1">Option 1</option>
                 <option value="2">Option 2</option>
