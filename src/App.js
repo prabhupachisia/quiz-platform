@@ -9,7 +9,6 @@ import PlayQuiz from './Components/Pages/PlayQuiz/PlayQuiz';
 import NotFound from './Components/NotFound';
 import QuizCard from './Components/Pages/PlayQuiz/QuizCard';
 import Login from './Components/Login';
-import SignUp from './Components/SignUp';
 import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
 
 // Authentication wrapper component
@@ -24,7 +23,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
         <Route
           path="/"
           element={

@@ -1,47 +1,132 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
+import axios from "axios";
+import person from "./Images/person.png";
+import pass from "./Images/password.png";
+import emailimg from "./Images/email.png";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [action, setAction] = useState("Sign Up");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("Teacher");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    setAction("Login");
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post("http://localhost:5000/api/login", {
         username,
         password,
       });
-
-      // Store token in localStorage
-      localStorage.setItem('token', response.data.token);
-
-      // Redirect to home page
-      navigate('/');
+      localStorage.setItem("token", response.data.tokens.access.token);
+      navigate("/");
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please try again.');
+      setError(err.response?.data?.error || "Login failed. Please try again.");
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    setAction("Sign Up");
+    e.preventDefault();
+    setError("");
+
+    const userData = {
+      user: {
+        role,
+        isEmailVerified: false,
+        name: username,
+        email,
+      },
+      password,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/signup", userData);
+      alert(response.data.message);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.error || "Sign up failed. Please try again.");
     }
   };
 
   return (
-    <div id="login-container" className="login-container">
-      <div id="login-box" className="login-box">
-        <h2 id="login-title">Login</h2>
-        {error && <div id="login-error" className="error-message">{error}</div>}
-        <form onSubmit={handleLogin} id="login-form">
-          <input id="login-username" type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-          <input id="login-password" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button id="login-submit" type="submit" onClick={handleLogin}>Sign In</button>
-          <button id="login-signup" type="button" onClick={() => navigate('/signup')}>Sign Up</button>
-        </form>
+    <div className="container">
+      <div className="header">
+        <div className="text">{action}</div>
+        <div className="underline"></div>
+      </div>
+      <div className="inputs">
+        {action === "Login" ? null : (
+          <div className="input">
+            <img src={person} alt="" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+        )}
+
+        <div className="input">
+          <img src={emailimg} alt="" />
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="input">
+          <img src={pass} alt="" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {action === "Login" ? null : (
+          <div className="input">
+            <select name="role" id="roles" value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="Teacher">Teacher</option>
+              <option value="Student">Student</option>
+            </select>
+          </div>
+        )}
+      </div>
+      {action === "Sign Up" ? null : (
+        <div className="forgot-password">
+          Lost Password? <span>Click Here</span>
+        </div>
+      )}
+
+      <div className="submit-container">
+        <div
+          className={action === "Login" ? "submit gray" : "submit"}
+          onClick={handleSignUp}
+        >
+          Sign Up
+        </div>
+        <div
+          className={action === "Sign Up" ? "submit gray" : "submit"}
+          onClick={handleLogin}
+        >
+          Login
+        </div>
       </div>
     </div>
   );
 };
+
 export default Login;
