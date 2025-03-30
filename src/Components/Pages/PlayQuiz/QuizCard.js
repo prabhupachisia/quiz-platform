@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAnswer } from "../../../Redux/Actions/Actions";
 import Result from "./Result";
@@ -9,13 +9,28 @@ function QuizCard() {
   const [showModal, setShowModal] = useState(false);
   const [finalAnswer, setFinalAnswer] = useState({});
   const [disable, setDisable] = useState(true);
-  const quiz = useSelector((state) => state.reducer.playQuiz).questions;
+  const [timeLeft, setTimeLeft] = useState(null);
+  const quizData = useSelector((state) => state.reducer.playQuiz);
+  const quiz = quizData.questions;
   const title = useSelector((state) => state.reducer.title);
   const name = useSelector((state) => state.reducer.name);
   const dispatch = useDispatch();
 
-  const question = quiz[count].question;
-  const answers = quiz[count].answers;
+  useEffect(() => {
+    if (quizData.timer) {
+      setTimeLeft(quizData.timer);
+    }
+  }, [quizData]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setShowModal(true);
+    }
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [timeLeft]);
 
   const nextQuestionHandler = () => {
     dispatch(getAnswer(finalAnswer));
@@ -45,9 +60,12 @@ function QuizCard() {
           <div className="title-container">
             <h2>{title}</h2>
           </div>
-          <h2>Q.{count + 1} {question}</h2>
+          <div className="timer-container">
+            <h3>Time Left: {timeLeft}s</h3>
+          </div>
+          <h2>Q.{count + 1} {quiz[count].question}</h2>
           <div className="options-container">
-            {answers.map((el, i) => (
+            {quiz[count].answers.map((el, i) => (
               <div
                 className={`quiz-option-container ${finalAnswer.id === el.id ? "selected" : ""}`}
                 onClick={() => onClickHandler(el)}
