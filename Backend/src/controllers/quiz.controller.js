@@ -36,6 +36,36 @@ const createQuiz = catchAsync(async (req, res) => {
     res.status(httpStatus.CREATED).send({ quiz });
 });
 
+const getQuiz = catchAsync(async (req, res) => {
+    const { quizId } = req.params;
+
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+        return res.status(httpStatus.NOT_FOUND).send({ message: 'Quiz not found' });
+    }
+
+    const questions = await Question.find({ quizId });
+
+    const response = {
+        title: quiz.title,
+        description: quiz.description,
+        category: quiz.category,
+        difficulty: quiz.difficulty,
+        duration: quiz.duration,
+        questions: questions.map(q => ({
+            question: q.question,
+            option1: q.option1,
+            option2: q.option2,
+            option3: q.option3,
+            option4: q.option4,
+            answer: q.answer,
+        })),
+    };
+
+    res.status(httpStatus.OK).send(response);
+});
+
 module.exports = {
     createQuiz,
+    getQuiz
 };

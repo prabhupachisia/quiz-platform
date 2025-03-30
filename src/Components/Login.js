@@ -21,7 +21,7 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post("http://localhost:5000/v1/auth/login", {
         username,
         password,
       });
@@ -48,7 +48,7 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:5000/api/signup", userData);
+      const response = await axios.post("http://localhost:5000/v1/auth/register", userData);
       alert(response.data.message);
       navigate("/login");
     } catch (err) {
