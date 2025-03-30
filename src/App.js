@@ -12,9 +12,8 @@ import Login from './Components/Login';
 import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
 
 const PrivateRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user")); // Retrieve user info
-
-  return user ? children : <Navigate to="/login" replace />;
+  const token = localStorage.getItem("accessToken");
+  return token ? children : <Navigate to="/login" replace />;
 };
 
 

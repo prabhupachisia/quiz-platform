@@ -2,7 +2,7 @@ import React from 'react'
 import './Footer.css'
 function Footer() {
   return (
-    <div className="container">
+    <div className="footer-container">
       <div className="footer">
         <div className="row">
           <a href="#" target="blank"><i className="fa fa-instagram" /></a>

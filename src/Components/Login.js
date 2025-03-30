@@ -79,7 +79,7 @@ const Login = () => {
 
   return (
     <div className="container">
-      <div className="header">
+      <div className="login-header">
         <div className="text">{action}</div>
         <div className="underline"></div>
       </div>
