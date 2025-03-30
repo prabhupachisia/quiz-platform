@@ -22,7 +22,7 @@ const Login = () => {
 
     try {
       const response = await axios.post("http://localhost:5000/v1/auth/login", {
-        username,
+        email,
         password,
       });
       localStorage.setItem("token", response.data.tokens.access.token);
@@ -38,12 +38,9 @@ const Login = () => {
     setError("");
 
     const userData = {
-      user: {
-        role,
-        isEmailVerified: false,
-        name: username,
-        email,
-      },
+      role,
+      name: username,
+      email,
       password,
     };
 
@@ -99,8 +96,8 @@ const Login = () => {
         {action === "Login" ? null : (
           <div className="input">
             <select name="role" id="roles" value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="Teacher">Teacher</option>
-              <option value="Student">Student</option>
+              <option value="teacher">Teacher</option>
+              <option value="student">Student</option>
             </select>
           </div>
         )}
