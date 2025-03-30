@@ -87,7 +87,7 @@ const NewQuizForm = () => {
 
     try {
       // Send all quiz data in one request
-      await axios.post("http://localhost:5000/api/quizzes", newQuiz);
+      await axios.post("http://localhost:5000/v1/quiz/createQuiz", newQuiz);
 
       alert("Quiz created successfully!");
       navigate("/play-quiz");
