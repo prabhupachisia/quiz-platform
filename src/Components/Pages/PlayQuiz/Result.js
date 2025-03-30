@@ -14,7 +14,7 @@ const Result = ({ name }) => {
 
   const resetQuizHandler = () => {
     dispatch(resetQuiz());
-    navigate("/");
+    navigate("/leaderboard");
   };
 
   return (

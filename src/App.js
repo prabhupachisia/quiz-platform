@@ -10,6 +10,7 @@ import NotFound from './Components/NotFound';
 import QuizCard from './Components/Pages/PlayQuiz/QuizCard';
 import Login from './Components/Login';
 import SignUp from './Components/SignUp';
+import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
 
 // Authentication wrapper component
 const PrivateRoute = ({ children }) => {
@@ -24,47 +25,55 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <PrivateRoute>
               <HomePage />
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
-          path="/create-new" 
+        <Route
+          path="/create-new"
           element={
             <PrivateRoute>
               <CreateQuiz />
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
-          path="/my-quiz" 
+        <Route
+          path="/my-quiz"
           element={
             <PrivateRoute>
               <MyQuiz />
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
-          path="/play-quiz" 
+        <Route
+          path="/play-quiz"
           element={
             <PrivateRoute>
               <PlayQuiz />
             </PrivateRoute>
-          } 
+          }
         />
-        <Route 
-          path="/quiz" 
+        <Route
+          path="/quiz"
           element={
             <PrivateRoute>
               <QuizCard />
             </PrivateRoute>
-          } 
-        /> 
-        <Route path='*' element={<NotFound />}/>
+          }
+        />
+        <Route
+          path="/leaderboard"
+          element={
+            <PrivateRoute>
+              <Leaderboard />
+            </PrivateRoute>
+          }
+        />
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <Footer />
     </div>
