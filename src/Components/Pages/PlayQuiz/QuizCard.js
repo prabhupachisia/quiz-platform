@@ -12,14 +12,12 @@ function QuizCard() {
   const [timeLeft, setTimeLeft] = useState(null);
   const quizData = useSelector((state) => state.reducer.playQuiz);
   const quiz = quizData.questions;
-  const title = useSelector((state) => state.reducer.title);
+  const title = quizData.title;
   const name = useSelector((state) => state.reducer.name);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (quizData.timer) {
-      setTimeLeft(quizData.timer);
-    }
+    setTimeLeft(quizData.duration);
   }, [quizData]);
 
   useEffect(() => {
@@ -42,13 +40,13 @@ function QuizCard() {
     }
   };
 
-  const onClickHandler = (el) => {
-    getAnswerHandler(el.answer, el.correct, el.id);
+  const onClickHandler = (optionNumber) => {
+    getAnswerHandler(optionNumber, optionNumber === quiz[count].answer, count);
     setDisable(false);
   };
 
-  const getAnswerHandler = (answer, correct, id) => {
-    setFinalAnswer({ answer, isCorrect: correct, id });
+  const getAnswerHandler = (answer, isCorrect, id) => {
+    setFinalAnswer({ answer, isCorrect, id });
   };
 
   return (
@@ -65,13 +63,13 @@ function QuizCard() {
           </div>
           <h2>Q.{count + 1} {quiz[count].question}</h2>
           <div className="options-container">
-            {quiz[count].answers.map((el, i) => (
+            {[1, 2, 3, 4].map((num) => (
               <div
-                className={`quiz-option-container ${finalAnswer.id === el.id ? "selected" : ""}`}
-                onClick={() => onClickHandler(el)}
-                key={i}
+                className={`quiz-option-container ${finalAnswer.answer === num ? "selected" : ""}`}
+                onClick={() => onClickHandler(num)}
+                key={num}
               >
-                <p>{el.answer}</p>
+                <p>{quiz[count][`option${num}`]}</p>
               </div>
             ))}
           </div>

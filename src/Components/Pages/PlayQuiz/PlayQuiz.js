@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { getName, playQuiz } from '../../../Redux/Actions/Actions';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,8 @@ const PlayQuiz = () => {
 
   // Get username from local storage
   const user = JSON.parse(localStorage.getItem("user"));
-  const username = user.name;
+  const username = user ? user.name : "Guest";
+
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -37,8 +38,10 @@ const PlayQuiz = () => {
     }
 
     try {
+      const response = await axios.get(`http://localhost:5000/v1/quiz/getQuiz/${id}`);
       dispatch(getName(username));
-      dispatch(playQuiz(id));
+      dispatch(playQuiz(response.data));
+      console.log("Navigating to quiz:", id);
       navigate(`/quiz/${id}`);
     } catch (error) {
       console.error("Error starting quiz", error);
@@ -65,10 +68,13 @@ const PlayQuiz = () => {
             <p style={{ color: "black", fontStyle: "italic" }}>There are Currently No Quizzes!</p>
           ) : (
             <div className="quiz-list">
-              {quizzes.filter((el) => el.isActive).map((el) => (
-                <div key={el.id} className="quiz-card" onClick={() => play(el.id)}>
-                  <h4>{el.title}</h4>
-                  <p>{el.description}</p>
+              {quizzes.map((quiz) => (
+                <div key={quiz._id} className="quiz-card" onClick={() => play(quiz._id)}>
+                  <h4>{quiz.title}</h4>
+                  <p>{quiz.description}</p>
+                  <p><strong>Category:</strong> {quiz.category}</p>
+                  <p><strong>Difficulty:</strong> {quiz.difficulty}</p>
+                  <p><strong>Duration:</strong> {quiz.duration} secs</p>
                 </div>
               ))}
             </div>

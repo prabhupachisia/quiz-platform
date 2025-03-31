@@ -1,47 +1,35 @@
 import ACTIONTYPE from "./ActionType";
 
-export const addQuiz = (data) => {
-    return {
-      type: ACTIONTYPE.ADDQUIZ,
-      payload: data,
-    };
-  };
-  export const toggleActive = (id) => {
-    return {
-      type: ACTIONTYPE.TOGGLEACTIVE,
-      payload: id,
-    };
-  };
-  
-  export const deleteQuiz = (id) => {
-    return {
-      type: ACTIONTYPE.DELETEQUIZ,
-      payload: id,
-    };
-  };
-    export const playQuiz = (id) => {
-    return {
-      type: ACTIONTYPE.PLAYQUIZ,
-      payload: id,
-    };
-  };
-  export const getName = (name) => {
-    return {
-      type: ACTIONTYPE.GETNAME,
-      payload: name,
-    };
-  };
-  
-  
-  export const getAnswer = (ans) => {
-    return {
-      type: ACTIONTYPE.GETANSWER,
-      payload: ans,
-    };
-  };
-  export const resetQuiz = () => {
-    return {
-      type: ACTIONTYPE.RESET,
-    };
-  };
- 
+export const addQuiz = (data) => ({
+  type: ACTIONTYPE.ADDQUIZ,
+  payload: data,
+});
+
+export const toggleActive = (id) => ({
+  type: ACTIONTYPE.TOGGLEACTIVE,
+  payload: id,
+});
+
+export const deleteQuiz = (id) => ({
+  type: ACTIONTYPE.DELETEQUIZ,
+  payload: id,
+});
+
+export const playQuiz = (quizData) => ({
+  type: ACTIONTYPE.PLAYQUIZ,
+  payload: quizData, // Now sending full quiz data instead of just ID
+});
+
+export const getName = (name) => ({
+  type: ACTIONTYPE.GETNAME,
+  payload: name,
+});
+
+export const getAnswer = (ans) => ({
+  type: ACTIONTYPE.GETANSWER,
+  payload: ans,
+});
+
+export const resetQuiz = () => ({
+  type: ACTIONTYPE.RESET,
+});
