@@ -7,13 +7,21 @@ import "./Navbar.css";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("accessToken"));
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
-  // Check login status whenever component updates
+  // Check login status and get user role
   useEffect(() => {
     const checkLoginStatus = () => {
       setIsLoggedIn(!!localStorage.getItem("accessToken"));
+
+      // Get user role from localStorage
+      const user = JSON.parse(localStorage.getItem("user"));
+      setUserRole(user?.role || null);
     };
+
+    // Run on mount
+    checkLoginStatus();
 
     // Listen for changes to localStorage (detect login/logout)
     window.addEventListener("storage", checkLoginStatus);
@@ -24,7 +32,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async (event) => {
-    event.preventDefault(); // Prevents default link behavior
+    event.preventDefault(); // Prevent default link behavior
 
     const refreshToken = localStorage.getItem("refreshToken");
 
@@ -37,6 +45,7 @@ const Navbar = () => {
       localStorage.removeItem("user");
 
       setIsLoggedIn(false); // Update state immediately
+      setUserRole(null); // Reset role
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error.response?.data?.error || "Something went wrong.");
@@ -63,15 +72,18 @@ const Navbar = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                to="/my-quiz"
-                className={activeTab === 1 ? "active" : ""}
-                onClick={() => setActiveTab(1)}
-              >
-                My Quiz
-              </Link>
-            </li>
+            {/* Hide "My Quiz" if user is a student */}
+            {isLoggedIn && userRole !== "student" && (
+              <li>
+                <Link
+                  to="/my-quiz"
+                  className={activeTab === 1 ? "active" : ""}
+                  onClick={() => setActiveTab(1)}
+                >
+                  My Quiz
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 to="/play-quiz"

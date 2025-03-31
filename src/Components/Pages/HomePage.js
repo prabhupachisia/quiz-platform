@@ -7,8 +7,14 @@ import './HomePage.css'; // Importing the CSS file
 
 const HomePage = () => {
   const [headLine, setHeadLine] = useState("WELCOME TO OUR WEBSITE");
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
+    // Fetch user role from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUserRole(user?.role || null);
+
+    // Toggle the headline text
     const interval = setInterval(() => {
       setHeadLine((prev) =>
         prev === "WELCOME TO OUR WEBSITE" ? "CREATE YOUR QUIZ AND PLAY" : "WELCOME TO OUR WEBSITE"
@@ -21,20 +27,27 @@ const HomePage = () => {
     <div className="homepage-container">
       <h2 className="headline">{headLine}</h2>
       <div className="card-container">
-        <Link to="/create-new" className="card">
-          <img src={pic1} alt="Create quiz" />
-          <div className="card-content">
-            <h3>Create your quiz by clicking here!</h3>
-          </div>
-        </Link>
+        {/* Hide "Create Quiz" if the user is a student */}
+        {userRole !== "student" && (
+          <Link to="/create-new" className="card">
+            <img src={pic1} alt="Create quiz" />
+            <div className="card-content">
+              <h3>Create your quiz by clicking here!</h3>
+            </div>
+          </Link>
+        )}
 
-        <Link to="/my-quiz" className="card">
-          <img src={pic2} alt="My quiz" />
-          <div className="card-content">
-            <h3>Click here to see your quizzes!</h3>
-          </div>
-        </Link>
+        {/* Hide "My Quiz" if the user is a student */}
+        {userRole !== "student" && (
+          <Link to="/my-quiz" className="card">
+            <img src={pic2} alt="My quiz" />
+            <div className="card-content">
+              <h3>Click here to see your quizzes!</h3>
+            </div>
+          </Link>
+        )}
 
+        {/* Always show "Play Quiz" for everyone */}
         <Link to="/play-quiz" className="card">
           <img src={pic3} alt="Play quiz" />
           <div className="card-content">
