@@ -7,5 +7,6 @@ router.get('/leaderboard/:quizId', resultController.showLeaderboard);
 router.get('/score/:quizId', resultController.showUserScore);
 router.get('/my-scores', resultController.showMyScores);
 router.get('/all-scores', resultController.showAllScores);
+router.post('/submit/:quizId', resultController.submitResult);
 
 module.exports = router;

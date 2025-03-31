@@ -69,10 +69,39 @@ const showAllScores = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(results);
 });
 
+const submitScore = catchAsync(async (req, res) => {
+    const { quizId } = req.params;
+    const userId = req.user._id;
+    const { score } = req.body;
+
+    // Ensure the quiz exists
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Quiz not found');
+    }
+
+    // Check if the user already has a result for this quiz
+    let result = await Result.findOne({ quizId, userId });
+
+    if (result) {
+        // If the new score is higher, update it
+        if (score > result.score) {
+            result.score = score;
+            await result.save();
+        }
+    } else {
+        // Create a new result entry
+        result = new Result({ quizId, userId, score });
+        await result.save();
+    }
+
+    res.status(httpStatus.OK).send({ message: 'Score submitted successfully', result });
+});
 
 module.exports = {
     showLeaderboard,
     showUserScore,
     showMyScores,
     showAllScores,
+    submitScore,
 };
