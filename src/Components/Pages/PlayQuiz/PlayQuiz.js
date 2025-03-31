@@ -1,28 +1,49 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { getName, playQuiz } from '../../../Redux/Actions/Actions';
 import { useNavigate } from 'react-router-dom';
 import "./PlayQuiz.css";
-import img2 from "../../Images/card.png";
 
 const PlayQuiz = () => {
-  const quiz = useSelector((state) => state.reducer.quiz);
-  const name = useRef();
+  const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const play = (id) => {
-    if (name.current.value === "") {
-      alert("Please enter a name!");
-      return;
-    }
-    if (name.current.value.length < 5 || name.current.value.length > 50) {
+  // Get username from local storage
+  const user = JSON.parse(localStorage.getItem("user"));
+  const username = user.name;
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/v1/quiz/getQuiz');
+        setQuizzes(response.data);
+      } catch (err) {
+        setError("Failed to load quizzes. Try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
+
+  const play = async (id) => {
+    if (!username || username.length < 5 || username.length > 50) {
       alert("Enter a valid name between 5 and 50 characters!");
       return;
     }
-    dispatch(getName(name.current.value));
-    dispatch(playQuiz(id));
-    navigate("/quiz");
+
+    try {
+      dispatch(getName(username));
+      dispatch(playQuiz(id));
+      navigate(`/quiz/${id}`);
+    } catch (error) {
+      console.error("Error starting quiz", error);
+      alert("Failed to start the quiz. Please try again.");
+    }
   };
 
   return (
@@ -34,23 +55,24 @@ const PlayQuiz = () => {
         <div className="quiz-description" style={{ textAlign: "center" }}>
           <h4>Select the quiz you want to play.</h4>
           <div className="input-name">
-            <div className="quiz-name">
+            <p><strong>Username:</strong> {username}</p>
+          </div>
+          {loading ? (
+            <p>Loading quizzes...</p>
+          ) : error ? (
+            <p style={{ color: "red" }}>{error}</p>
+          ) : quizzes.length === 0 ? (
+            <p style={{ color: "black", fontStyle: "italic" }}>There are Currently No Quizzes!</p>
+          ) : (
+            <div className="quiz-list">
+              {quizzes.filter((el) => el.isActive).map((el) => (
+                <div key={el.id} className="quiz-card" onClick={() => play(el.id)}>
+                  <h4>{el.title}</h4>
+                  <p>{el.description}</p>
+                </div>
+              ))}
             </div>
-          </div>
-          <div className="created-quiz">
-            {quiz.length === 0 ? (
-              <p style={{ color: "black", fontStyle: "italic" }}>There are Currently No Quiz!</p>
-            ) : (
-              <div className="quiz-list">
-                {quiz.filter((el) => el.isActive).map((el) => (
-                  <div key={el.id} className="quiz-card" onClick={() => play(el.id)}>
-                    <h4>{el.title}</h4>
-                    <p>{el.description}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
