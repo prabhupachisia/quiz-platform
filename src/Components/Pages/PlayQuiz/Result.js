@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetQuiz } from "../../../Redux/Actions/Actions";
 import "./Result.css";
-import img from "../../Images/bg.png";
+import img from "../../Images/bgres.jpg";
 
 const Result = ({ name }) => {
   const results = useSelector(state => state.reducer.answers);
@@ -18,7 +18,7 @@ const Result = ({ name }) => {
   };
 
   return (
-    <div className="result-container" style={{ backgroundImage: `url(${img})` }}>
+    <div className="result-container">
       <div className="result-box">
         <h2>Hii {name} 👋</h2>
         <h1>Your Score is {correctAnswers} out of {totalQuestions}</h1>

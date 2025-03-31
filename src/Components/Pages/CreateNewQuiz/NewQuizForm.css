@@ -2,11 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 300px;
+  overflow: auto;
+  width: 600px;
 }
 
 .quizForm {
-  width: 50%;
+  width: 300%;
   padding: 20px;
   background: #f9f9f9;
   border-radius: 10px;
