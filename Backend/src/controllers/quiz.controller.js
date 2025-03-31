@@ -37,6 +37,17 @@ const createQuiz = catchAsync(async (req, res) => {
 });
 
 const getQuiz = catchAsync(async (req, res) => {
+    const quizzes = await Quiz.find().lean();
+
+    if (!quizzes || quizzes.length === 0) {
+        return res.status(httpStatus.NOT_FOUND).send({ message: 'No quizzes found' });
+    }
+
+    res.status(httpStatus.OK).send(quizzes);
+});
+
+
+const getQuestion = catchAsync(async (req, res) => {
     const { quizId } = req.params;
 
     const quiz = await Quiz.findById(quizId);
@@ -67,5 +78,6 @@ const getQuiz = catchAsync(async (req, res) => {
 
 module.exports = {
     createQuiz,
-    getQuiz
+    getQuiz,
+    getQuestion,
 };
