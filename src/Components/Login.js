@@ -26,19 +26,19 @@ const Login = () => {
         password,
       });
 
-      // Extract user and tokens from the response
       const { user, tokens } = response.data;
 
-      // Store user info along with tokens in localStorage
       localStorage.setItem("accessToken", tokens.access.token);
       localStorage.setItem("refreshToken", tokens.refresh.token);
-      localStorage.setItem("user", JSON.stringify(user)); // Store user data as string
+      localStorage.setItem("user", JSON.stringify(user));
 
-      navigate("/"); // Redirect to homepage
+      navigate("/");  // Redirect to homepage
+      window.location.reload();
     } catch (err) {
       setError(err.response?.data?.error || "Login failed. Please try again.");
     }
   };
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -57,13 +57,13 @@ const Login = () => {
       if (response.data) {
         const { user, tokens } = response.data;
 
-        // Ensure tokens exist before storing
         if (tokens && tokens.access && tokens.refresh) {
           localStorage.setItem("accessToken", tokens.access.token);
           localStorage.setItem("refreshToken", tokens.refresh.token);
           localStorage.setItem("user", JSON.stringify(user));
 
-          navigate("/"); // Redirect to homepage
+          navigate("/");  // Redirect to homepage
+          window.location.reload(); // 🔄 Force page reload to update Navbar
         } else {
           throw new Error("Signup successful, but no tokens received.");
         }
@@ -74,8 +74,6 @@ const Login = () => {
       setError(err.response?.data?.message || "Sign up failed. Please try again.");
     }
   };
-
-
 
   return (
     <div className="container">
