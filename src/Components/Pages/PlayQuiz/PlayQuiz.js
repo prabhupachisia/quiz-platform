@@ -35,8 +35,7 @@ const PlayQuiz = () => {
           <h4>Enter your name and select the quiz you want to play.</h4>
           <div className="input-name">
             <div className="quiz-name">
-              <label>Enter Your Name</label>
-              <input type="text" ref={name} placeholder={"....."} autoFocus className="name-input-text" />
+
             </div>
           </div>
           <div className="created-quiz">

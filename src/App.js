@@ -8,7 +8,8 @@ import MyQuiz from './Components/Pages/MyQuizzes/MyQuiz';
 import PlayQuiz from './Components/Pages/PlayQuiz/PlayQuiz';
 import NotFound from './Components/NotFound';
 import QuizCard from './Components/Pages/PlayQuiz/QuizCard';
-import Login from './Components/Login';
+import Login from './Components/login/login';
+import Signup from './Components/login/signup';
 import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
 
 const PrivateRoute = ({ children }) => {
@@ -23,6 +24,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route
           path="/"
           element={
