@@ -17,10 +17,6 @@ const resultSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    totalQuestions: {
-        type: Number,
-        required: true,
-    },
 }, {
     timestamps: true,
 });

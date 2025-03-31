@@ -35,7 +35,7 @@ const reducer = (state = initialState, actions) => {
     case ACTIONTYPE.PLAYQUIZ:
       return {
         ...state,
-        playQuiz: actions.payload, // Store full quiz data
+        playQuiz: { ...actions.payload, quizId: actions.payload.quizId || actions.payload._id },
       };
 
     case ACTIONTYPE.GETANSWER:
@@ -57,4 +57,4 @@ const reducer = (state = initialState, actions) => {
   }
 };
 
-export default reducer;
+export default reducer; 

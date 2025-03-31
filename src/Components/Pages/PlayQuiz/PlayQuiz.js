@@ -12,7 +12,6 @@ const PlayQuiz = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Get username from local storage
   const user = JSON.parse(localStorage.getItem("user"));
   const username = user ? user.name : "Guest";
 
@@ -27,7 +26,6 @@ const PlayQuiz = () => {
         setLoading(false);
       }
     };
-
     fetchQuizzes();
   }, []);
 
@@ -41,7 +39,6 @@ const PlayQuiz = () => {
       const response = await axios.get(`http://localhost:5000/v1/quiz/getQuiz/${id}`);
       dispatch(getName(username));
       dispatch(playQuiz(response.data));
-      console.log("Navigating to quiz:", id);
       navigate(`/quiz/${id}`);
     } catch (error) {
       console.error("Error starting quiz", error);
@@ -57,9 +54,7 @@ const PlayQuiz = () => {
         </div>
         <div className="quiz-description" style={{ textAlign: "center" }}>
           <h4>Select the quiz you want to play.</h4>
-          <div className="input-name">
-            <p><strong>Username:</strong> {username}</p>
-          </div>
+          <p><strong>Username:</strong> {username}</p>
           {loading ? (
             <p>Loading quizzes...</p>
           ) : error ? (
