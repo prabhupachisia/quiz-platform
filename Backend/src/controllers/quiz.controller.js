@@ -58,6 +58,7 @@ const getQuestion = catchAsync(async (req, res) => {
     const questions = await Question.find({ quizId });
 
     const response = {
+        _id: quiz._id,
         title: quiz.title,
         description: quiz.description,
         category: quiz.category,

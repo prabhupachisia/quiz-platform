@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { getAnswer } from "../../../Redux/Actions/Actions";
 import Result from "./Result";
 import "./QuizCard.css";
 
@@ -11,21 +9,20 @@ function QuizCard() {
   const [finalAnswer, setFinalAnswer] = useState({});
   const [disable, setDisable] = useState(true);
   const [timeLeft, setTimeLeft] = useState(null);
-  const quizData = useSelector((state) => state.reducer.playQuiz);
+  const [answers, setAnswers] = useState([]);
+
+  const quizData = JSON.parse(localStorage.getItem("quizData")) || {};
   const quiz = quizData.questions || [];
   const title = quizData.title || "Quiz";
-  const name = useSelector((state) => state.reducer.name);
-  const dispatch = useDispatch();
-  const answers = useSelector((state) => state.reducer.answers);
-  const correctAnswers = answers.filter((el) => el.isCorrect).length;
-  const quizId = quizData.quizId || quizData._id || null;
-
+  const name = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).name : "Guest";
+  const token = localStorage.getItem("accessToken");
   useEffect(() => {
     setTimeLeft(quizData.duration || 60);
   }, [quizData]);
 
   useEffect(() => {
     if (timeLeft === 0) {
+      console.log("⏳ Time up! Ending quiz...");
       handleQuizEnd();
     }
     if (timeLeft > 0) {
@@ -36,26 +33,33 @@ function QuizCard() {
 
   const handleQuizEnd = async () => {
     setShowModal(true);
+    let quizId = localStorage.getItem("quizId");
+    localStorage.removeItem("quizId");
+    console.log("📡 Attempting to submit score...");
+    console.log(quizId);
+
+    const correctAnswers = answers.filter((el) => el.isCorrect).length;
+
     if (!quizId) {
-      console.error("❌ Quiz ID is missing!");
+      console.error("❌ Quiz ID is missing! Submission aborted.");
       return;
     }
 
     try {
-      console.log("📡 Sending final score to backend...");
-      await axios.post(
+      const response = await axios.post(
         `http://localhost:5000/v1/result/submit/${quizId}`,
         { score: correctAnswers },
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" } }
       );
-      console.log("✅ Score successfully sent!");
+
+      console.log("✅ Score successfully sent:", response.data);
     } catch (error) {
       console.error("❌ Error sending score:", error.response?.data || error);
     }
   };
 
   const nextQuestionHandler = () => {
-    dispatch(getAnswer(finalAnswer));
+    setAnswers([...answers, finalAnswer]);
     setDisable(true);
     if (count >= quiz.length - 1) {
       handleQuizEnd();

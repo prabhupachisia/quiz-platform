@@ -38,7 +38,9 @@ const PlayQuiz = () => {
     try {
       const response = await axios.get(`http://localhost:5000/v1/quiz/getQuiz/${id}`);
       dispatch(getName(username));
-      dispatch(playQuiz(response.data));
+      console.log(response.data._id);
+      dispatch(playQuiz({ ...response.data, quizId: response.data._id })); // Ensure quizId is stored
+      localStorage.setItem("quizId",id);
       navigate(`/quiz/${id}`);
     } catch (error) {
       console.error("Error starting quiz", error);
