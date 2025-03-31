@@ -29,6 +29,7 @@ const PlayQuiz = () => {
     fetchQuizzes();
   }, []);
 
+  // Updated play function in PlayQuiz.js
   const play = async (id) => {
     if (!username || username.length < 5 || username.length > 50) {
       alert("Enter a valid name between 5 and 50 characters!");
@@ -37,16 +38,20 @@ const PlayQuiz = () => {
 
     try {
       const response = await axios.get(`http://localhost:5000/v1/quiz/getQuiz/${id}`);
-      dispatch(getName(username));
-      console.log(response.data._id);
-      dispatch(playQuiz({ ...response.data, quizId: response.data._id })); // Ensure quizId is stored
-      localStorage.setItem("quizId",id);
+      const quizData = response.data;
+
+      // Update both Redux and localStorage
+      dispatch(playQuiz(quizData));
+      localStorage.setItem("quizData", JSON.stringify(quizData));
+      localStorage.setItem("quizId", id);
+
       navigate(`/quiz/${id}`);
     } catch (error) {
       console.error("Error starting quiz", error);
       alert("Failed to start the quiz. Please try again.");
     }
   };
+
 
   return (
     <div style={{ marginTop: "100px" }}>
