@@ -14,7 +14,6 @@ const Leaderboard = () => {
             if (b.score !== a.score) {
                 return b.score - a.score;
             }
-            return a.timeTaken - b.timeTaken;
         });
         setSortedResults(sorted);
     }, [results]);
@@ -28,7 +27,6 @@ const Leaderboard = () => {
                         <th>Rank</th>
                         <th>Name</th>
                         <th>Score</th>
-                        <th>Time Taken (s)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,7 +35,6 @@ const Leaderboard = () => {
                             <td>{index + 1}</td>
                             <td>{user.name}</td>
                             <td>{user.score}</td>
-                            <td>{user.timeTaken}</td>
                         </tr>
                     ))}
                 </tbody>

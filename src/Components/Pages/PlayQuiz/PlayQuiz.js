@@ -32,10 +32,9 @@ const PlayQuiz = () => {
           <h1>PLAY QUIZ</h1>
         </div>
         <div className="quiz-description" style={{ textAlign: "center" }}>
-          <h4>Enter your name and select the quiz you want to play.</h4>
+          <h4>Select the quiz you want to play.</h4>
           <div className="input-name">
             <div className="quiz-name">
-
             </div>
           </div>
           <div className="created-quiz">
