@@ -236,3 +236,20 @@
     width: 100%;
   }
 }
+
+/* Leaderboard Button */
+.leaderboard-btn {
+  background: linear-gradient(135deg, #17a2b8, #117a8b);
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.leaderboard-btn:hover {
+  background: linear-gradient(135deg, #117a8b, #0b5a6b);
+  transform: scale(1.05);
+}

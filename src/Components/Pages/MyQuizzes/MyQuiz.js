@@ -73,6 +73,19 @@ const MyQuiz = () => {
       (selectedDifficulty === "All" || quiz.difficulty === selectedDifficulty) &&
       quiz.title?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const fetchLeaderboard = async (quizId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/v1/result/leaderboard/${quizId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Navigate to Leaderboard page with leaderboard data
+      navigate(`/leaderboard`, { state: { leaderboardData: response.data } });
+    } catch (error) {
+      console.error("Error fetching leaderboard data:", error);
+    }
+  };
+
 
   return (
     <div className="quiz-container">
@@ -144,11 +157,12 @@ const MyQuiz = () => {
                   <td>
                     <button
                       className="leaderboard-btn"
-                      onClick={() => navigate(`/leaderboard`)}
+                      onClick={() => fetchLeaderboard(quiz.id || quiz._id)}
                     >
                       View Leaderboard
                     </button>
                   </td>
+
                   <td>
                     {userRole !== "student" && (
                       <button className="delete-btn" onClick={() => handleDelete(quiz.id || quiz._id)}>🗑️</button>

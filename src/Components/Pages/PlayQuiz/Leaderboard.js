@@ -1,45 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "./Leaderboard.css";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import "./Leaderboard.css"; // Import the CSS file for styling
 
 const Leaderboard = () => {
-    const results = useSelector((state) => state.reducer.leaderboard);
-    const [sortedResults, setSortedResults] = useState([]);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        // Sort users by score (higher is better) and then by time (lower is better)
-        const sorted = [...results].sort((a, b) => {
-            if (b.score !== a.score) {
-                return b.score - a.score;
-            }
-        });
-        setSortedResults(sorted);
-    }, [results]);
+    const location = useLocation();
+    const leaderboardData = location.state?.leaderboardData || [];
 
     return (
         <div className="leaderboard-container">
-            <h1>Leaderboard</h1>
-            <table>
+            <h2 className="leaderboard-title">Leaderboard</h2>
+            <table className="leaderboard-table">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
+                        <th className="table-header">Name</th>
+                        <th className="table-header">Email</th>
+                        <th className="table-header">Score</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedResults.map((user, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{user.name}</td>
-                            <td>{user.score}</td>
+                    {leaderboardData.map((entry) => (
+                        <tr key={entry.id} className="table-row">
+                            <td className="table-data">{entry.userId.name}</td>
+                            <td className="table-data">{entry.userId.email}</td>
+                            <td className="table-data">{entry.score}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <button onClick={() => navigate("/")}>Go to Home</button>
         </div>
     );
 };
