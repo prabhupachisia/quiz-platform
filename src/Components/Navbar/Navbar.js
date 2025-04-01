@@ -47,7 +47,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="navbar-container">
         <div className="logo">
-          <img src={pic} alt="logo" width="110" height="30" />
+          <img src={pic} alt="logo" width="110" height="50" />
         </div>
 
         <nav className="nav-links">
