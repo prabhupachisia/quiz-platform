@@ -16,7 +16,7 @@ const Result = ({ name }) => {
     localStorage.removeItem("quizData");
     localStorage.removeItem("quizId");
     dispatch(resetQuiz());
-    navigate("/leaderboard");
+    navigate("/");
   };
   // const resetQuizHandler = () => {
   //   dispatch(resetQuiz());
