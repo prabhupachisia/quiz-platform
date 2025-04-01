@@ -37,15 +37,13 @@ const HomePage = () => {
           </Link>
         )}
 
-        {/* Hide "My Quiz" if the user is a student */}
-        {userRole !== "student" && (
-          <Link to="/my-quiz" className="card">
-            <img src={pic2} alt="My quiz" />
-            <div className="card-content">
-              <h3>Click here to see your quizzes!</h3>
-            </div>
-          </Link>
-        )}
+        <Link to="/my-quiz" className="card">
+          <img src={pic2} alt="My quiz" />
+          <div className="card-content">
+            <h3>Click here to see your quizzes!</h3>
+          </div>
+        </Link>
+
 
         {/* Always show "Play Quiz" for everyone */}
         <Link to="/play-quiz" className="card">

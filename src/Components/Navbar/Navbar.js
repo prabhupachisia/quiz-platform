@@ -62,18 +62,17 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <nav className="nav-links">
-          <ul>
-            <li>
-              <Link
-                to="/"
-                className={activeTab === 0 ? "active" : ""}
-                onClick={() => setActiveTab(0)}
-              >
-                Home
-              </Link>
-            </li>
-            {/* Hide "My Quiz" if user is a student */}
-            {isLoggedIn && userRole !== "student" && (
+          {isLoggedIn && (
+            < ul >
+              < li >
+                <Link
+                  to="/"
+                  className={activeTab === 0 ? "active" : ""}
+                  onClick={() => setActiveTab(0)}
+                >
+                  Home
+                </Link>
+              </li>
               <li>
                 <Link
                   to="/my-quiz"
@@ -83,27 +82,25 @@ const Navbar = () => {
                   My Quiz
                 </Link>
               </li>
-            )}
-            <li>
-              <Link
-                to="/play-quiz"
-                className={activeTab === 2 ? "active" : ""}
-                onClick={() => setActiveTab(2)}
-              >
-                Play Quiz
-              </Link>
-            </li>
-            {isLoggedIn && (
+              <li>
+                <Link
+                  to="/play-quiz"
+                  className={activeTab === 2 ? "active" : ""}
+                  onClick={() => setActiveTab(2)}
+                >
+                  Play Quiz
+                </Link>
+              </li>
+
               <li>
                 <Link to="/login" onClick={handleLogout} className={activeTab === 3 ? "active" : ""}>
                   Logout
                 </Link>
               </li>
-            )}
-          </ul>
+            </ul>)}
         </nav>
       </div>
-    </div>
+    </div >
   );
 };
 
