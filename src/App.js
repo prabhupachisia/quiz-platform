@@ -11,7 +11,7 @@ import QuizCard from './Components/Pages/PlayQuiz/QuizCard';
 import Login from './Components/login/login';
 import Signup from './Components/login/signup';
 import Leaderboard from './Components/Pages/PlayQuiz/Leaderboard';
-
+import Profile from './Components/Profile';
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("accessToken");
   return token ? children : <Navigate to="/login" replace />;
@@ -74,6 +74,7 @@ function App() {
           }
         />
         <Route path='*' element={<NotFound />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
     </div>

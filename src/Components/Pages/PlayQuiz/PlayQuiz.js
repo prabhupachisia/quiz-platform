@@ -31,8 +31,8 @@ const PlayQuiz = () => {
 
   // Updated play function in PlayQuiz.js
   const play = async (id) => {
-    if (!username || username.length < 5 || username.length > 50) {
-      alert("Enter a valid name between 5 and 50 characters!");
+    if (!username || username.length < 1 || username.length > 50) {
+      alert("Enter a valid name between 1 and 50 characters!");
       return;
     }
 
