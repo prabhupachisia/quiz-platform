@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { deleteQuiz, toggleActive } from "../../../Redux/Actions/Actions";
+import { deleteQuiz } from "../../../Redux/Actions/Actions";
 import "./MyQuiz.css";
 
 const MyQuiz = () => {
@@ -30,10 +30,10 @@ const MyQuiz = () => {
           response = await axios.get("http://localhost:5000/v1/result/my-scores", {
             headers: { Authorization: `Bearer ${token}` },
           });
-          setQuizzes(response.data);
+          setQuizzes(response.data); // Student quizzes from my-scores
         } else if (user?.role === "teacher") {
           response = await axios.get("http://localhost:5000/v1/quiz/getQuiz");
-          setQuizzes(response.data);
+          setQuizzes(response.data); // Teacher quizzes from getQuiz
         } else {
           setQuizzes(allQuizzes);
         }
@@ -41,6 +41,7 @@ const MyQuiz = () => {
         console.error("Error fetching quizzes:", error);
       }
     };
+
     fetchQuizzes();
   }, [allQuizzes, token]);
 
@@ -55,49 +56,47 @@ const MyQuiz = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      dispatch(deleteQuiz(id)); // Use 'id' instead of 'deleteID'
+      dispatch(deleteQuiz(id)); // Remove from Redux state
       setModal(false);
     } catch (error) {
       console.error("Error deleting quiz:", error);
     }
   };
 
-
-
-  const categories = ["All", ...new Set(quizzes.map((quiz) => quiz.category).filter(Boolean))];
-  const difficulties = ["All", ...new Set(quizzes.map((quiz) => quiz.difficulty).filter(Boolean))];
-
-  const filteredQuizzes = quizzes.filter(
-    (quiz) =>
-      (selectedCategory === "All" || quiz.category === selectedCategory) &&
-      (selectedDifficulty === "All" || quiz.difficulty === selectedDifficulty) &&
-      quiz.title?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
   const fetchLeaderboard = async (quizId) => {
     try {
       const response = await axios.get(`http://localhost:5000/v1/result/leaderboard/${quizId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Navigate to Leaderboard page with leaderboard data
       navigate(`/leaderboard`, { state: { leaderboardData: response.data } });
     } catch (error) {
       console.error("Error fetching leaderboard data:", error);
     }
   };
 
+  // Unique categories & difficulties for filtering
+  const categories = ["All", ...new Set(quizzes.map((quiz) => (quiz.quizId ? quiz.quizId.category : quiz.category)).filter(Boolean))];
+  const difficulties = ["All", ...new Set(quizzes.map((quiz) => (quiz.quizId ? quiz.quizId.difficulty : quiz.difficulty)).filter(Boolean))];
+
+  // Filtered quizzes based on role
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    (selectedCategory === "All" || (quiz.quizId ? quiz.quizId.category === selectedCategory : quiz.category === selectedCategory)) &&
+    (selectedDifficulty === "All" || (quiz.quizId ? quiz.quizId.difficulty === selectedDifficulty : quiz.difficulty === selectedDifficulty)) &&
+    (quiz.quizId ? quiz.quizId.title.toLowerCase() : quiz.title.toLowerCase()).includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="quiz-container">
       <div className="header">
         <h2>MY QUIZ</h2>
-        {userRole !== "student" && (
+        {userRole === "teacher" && (
           <Link to="/create-new" className="create-btn">
             Create New Quiz
           </Link>
         )}
       </div>
 
+      {/* Filters */}
       <div className="filter-container">
         <input
           type="text"
@@ -118,6 +117,7 @@ const MyQuiz = () => {
         </select>
       </div>
 
+      {/* Delete Confirmation Modal */}
       {modal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -129,9 +129,9 @@ const MyQuiz = () => {
             </div>
           </div>
         </div>
-      )
-      }
+      )}
 
+      {/* Quiz Table */}
       <div className="quiz-table-container">
         {filteredQuizzes.length === 0 ? (
           <p className="no-quiz-msg">No quizzes found.</p>
@@ -144,37 +144,33 @@ const MyQuiz = () => {
                 <th>Description</th>
                 {userRole === "student" && <th>Score</th>}
                 <th>Leaderboard</th>
-                <th>Actions</th>
+                {userRole === "teacher" && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
               {filteredQuizzes.map((quiz, index) => (
-                <tr key={quiz.id || quiz._id || index}>
+                <tr key={quiz.id || quiz.quizId?.id || index}>
                   <td>{index + 1}</td>
-                  <td>{quiz.title}</td>
-                  <td>{quiz.description}</td>
+                  <td>{quiz.quizId?.title || quiz.title}</td>
+                  <td>{quiz.quizId?.description || quiz.description}</td>
                   {userRole === "student" && <td>{quiz.score !== undefined ? quiz.score : "Not Attempted"}</td>}
                   <td>
-                    <button
-                      className="leaderboard-btn"
-                      onClick={() => fetchLeaderboard(quiz.id || quiz._id)}
-                    >
+                    <button className="leaderboard-btn" onClick={() => fetchLeaderboard(quiz.quizId?.id || quiz._id)}>
                       View Leaderboard
                     </button>
                   </td>
-
-                  <td>
-                    {userRole !== "student" && (
-                      <button className="delete-btn" onClick={() => handleDelete(quiz.id || quiz._id)}>🗑️</button>
-                    )}
-                  </td>
+                  {userRole === "teacher" && (
+                    <td>
+                      <button className="delete-btn" onClick={() => handleDelete(quiz.quizId?.id || quiz._id)}>🗑️</button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
-    </div >
+    </div>
   );
 };
 

@@ -5,7 +5,6 @@ import { resetQuiz } from "../../../Redux/Actions/Actions";
 import "./Result.css";
 
 const Result = ({ name }) => {
-  const results = useSelector((state) => state.reducer.answers);
   // const correctAnswers = results.filter((el) => el.isCorrect).length; // Ensure quizId exists
   const navigate = useNavigate();
   const dispatch = useDispatch();

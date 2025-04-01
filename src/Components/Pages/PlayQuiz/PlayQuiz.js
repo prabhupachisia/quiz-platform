@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { getName, playQuiz } from '../../../Redux/Actions/Actions';
+import { playQuiz } from '../../../Redux/Actions/Actions';
 import { useNavigate } from 'react-router-dom';
 import "./PlayQuiz.css";
 
