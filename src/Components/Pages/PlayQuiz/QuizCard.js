@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { getAnswer } from "../../../Redux/Actions/Actions";
+import { resetQuiz } from "../../../Redux/Actions/Actions";
 import Result from "./Result";
 import "./QuizCard.css";
 
@@ -9,13 +9,14 @@ function QuizCard() {
   const token = localStorage.getItem("accessToken");
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [finalAnswer, setFinalAnswer] = useState({});
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
   const [disable, setDisable] = useState(true);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [scoreSent, setScoreSent] = useState(false);
 
-  // Redux state
+  // Redux state (only for quiz data, not for answers)
   const quizData = useSelector((state) => state.reducer.playQuiz);
-  const answers = useSelector((state) => state.reducer.answers);
   const name = useSelector((state) => state.reducer.name);
 
   // Extract quiz details
@@ -42,18 +43,18 @@ function QuizCard() {
     }
   }, [timeLeft]);
 
-  // Handle end of quiz
-  const handleQuizEnd = async () => {
-    setShowModal(true);
-
-    if (!quizId) {
-      console.error("❌ Quiz ID is missing!");
-      return;
+  // Handle sending score to backend once
+  useEffect(() => {
+    if (showModal && !scoreSent && quizId) {
+      sendScoreToBackend();
     }
+  }, [showModal, scoreSent, quizId]);
 
+  // Send score to backend
+  const sendScoreToBackend = async () => {
     try {
       console.log("📡 Sending final score to backend...");
-      const correctAnswers = answers.filter((el) => el.isCorrect).length;
+      console.log("✅ Correct Answers:", correctAnswers);
 
       await axios.post(
         `http://localhost:5000/v1/result/submit/${quizId}`,
@@ -62,38 +63,51 @@ function QuizCard() {
       );
 
       console.log("✅ Score successfully sent!");
+      setScoreSent(true);
     } catch (error) {
       console.error("❌ Error sending score:", error.response?.data || error);
     }
   };
 
+  // Handle end of quiz
+  const handleQuizEnd = () => {
+    setShowModal(true);
+  };
+
   // Handle next question logic
   const nextQuestionHandler = () => {
-    dispatch(getAnswer(finalAnswer)); // Save answer in Redux
+    // Check if answer is correct and update score
+    if (selectedOption === quiz[count]?.answer) {
+      setCorrectAnswers(prev => prev + 1);
+    }
+
     setDisable(true);
+    setSelectedOption(null);
 
     if (count >= quiz.length - 1) {
       handleQuizEnd();
     } else {
-      setCount((prev) => prev + 1);
+      setCount(prev => prev + 1);
     }
   };
 
   // Handle option selection
   const onClickHandler = (optionNumber) => {
-    getAnswerHandler(optionNumber, optionNumber === quiz[count]?.answer, count);
+    setSelectedOption(optionNumber);
     setDisable(false);
-  };
-
-  // Store selected answer details
-  const getAnswerHandler = (answer, isCorrect, id) => {
-    setFinalAnswer({ answer, isCorrect, id });
   };
 
   return (
     <div className="outer">
       {showModal ? (
-        <Result name={name} />
+        <Result
+          name={name}
+          score={correctAnswers}
+          resetQuiz={() => {
+            dispatch(resetQuiz());
+            // Any additional reset logic
+          }}
+        />
       ) : (
         <div id="container">
           <div className="title-container">
@@ -108,8 +122,7 @@ function QuizCard() {
           <div className="options-container">
             {[1, 2, 3, 4].map((num) => (
               <div
-                className={`quiz-option-container ${finalAnswer.answer === num ? "selected" : ""
-                  }`}
+                className={`quiz-option-container ${selectedOption === num ? "selected" : ""}`}
                 onClick={() => onClickHandler(num)}
                 key={num}
               >
