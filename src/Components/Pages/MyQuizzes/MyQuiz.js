@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { deleteQuiz, toggleActive } from "../../../Redux/Actions/Actions";
 import "./MyQuiz.css";
@@ -8,6 +8,7 @@ import "./MyQuiz.css";
 const MyQuiz = () => {
   const token = localStorage.getItem("accessToken");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,14 +49,20 @@ const MyQuiz = () => {
     setModal(true);
   };
 
-  const confirmDelete = () => {
-    dispatch(deleteQuiz(deleteID));
-    setModal(false);
+  const confirmDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/v1/quiz/delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      dispatch(deleteQuiz(id)); // Use 'id' instead of 'deleteID'
+      setModal(false);
+    } catch (error) {
+      console.error("Error deleting quiz:", error);
+    }
   };
 
-  const toggleHandler = (id) => {
-    dispatch(toggleActive(id));
-  };
+
 
   const categories = ["All", ...new Set(quizzes.map((quiz) => quiz.category).filter(Boolean))];
   const difficulties = ["All", ...new Set(quizzes.map((quiz) => quiz.difficulty).filter(Boolean))];
@@ -104,12 +111,13 @@ const MyQuiz = () => {
             <h3>Confirm Delete</h3>
             <p>Are you sure you want to delete this quiz? This action is permanent.</p>
             <div className="modal-buttons">
-              <button onClick={confirmDelete} className="yes-btn">Yes</button>
+              <button onClick={() => confirmDelete(deleteID)} className="yes-btn">Yes</button>
               <button onClick={() => setModal(false)} className="no-btn">No</button>
             </div>
           </div>
         </div>
-      )}
+      )
+      }
 
       <div className="quiz-table-container">
         {filteredQuizzes.length === 0 ? (
@@ -122,7 +130,7 @@ const MyQuiz = () => {
                 <th>Title</th>
                 <th>Description</th>
                 {userRole === "student" && <th>Score</th>}
-                <th>Status</th>
+                <th>Leaderboard</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -134,16 +142,12 @@ const MyQuiz = () => {
                   <td>{quiz.description}</td>
                   {userRole === "student" && <td>{quiz.score !== undefined ? quiz.score : "Not Attempted"}</td>}
                   <td>
-                    {userRole === "teacher" ? (
-                      <button
-                        className={`status-btn ${quiz.isActive ? "active" : "inactive"}`}
-                        onClick={() => toggleHandler(quiz.id || quiz._id)}
-                      >
-                        {quiz.isActive ? "Active" : "Inactive"}
-                      </button>
-                    ) : (
-                      "N/A"
-                    )}
+                    <button
+                      className="leaderboard-btn"
+                      onClick={() => navigate(`/leaderboard`)}
+                    >
+                      View Leaderboard
+                    </button>
                   </td>
                   <td>
                     {userRole !== "student" && (
@@ -156,7 +160,7 @@ const MyQuiz = () => {
           </table>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
