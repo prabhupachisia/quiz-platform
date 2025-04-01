@@ -77,8 +77,22 @@ const getQuestion = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(response);
 });
 
+const deleteQuiz = catchAsync(async (req, res) => {
+    const { quizId } = req.params;
+
+    const quiz = await Quiz.findByIdAndDelete(quizId);
+    if (!quiz) {
+        return res.status(httpStatus.NOT_FOUND).send({ message: 'Quiz not found' });
+    }
+
+    await Question.deleteMany({ quizId });
+
+    res.status(httpStatus.OK).send({ message: 'Quiz deleted successfully' });
+});
+
 module.exports = {
     createQuiz,
     getQuiz,
     getQuestion,
+    deleteQuiz,
 };
