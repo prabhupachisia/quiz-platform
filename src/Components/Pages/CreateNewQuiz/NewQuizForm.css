@@ -112,12 +112,9 @@ select {
 }
 
 /* Question Button */
-.questionBtn {
+.addques {
   margin-top: 20px;
   text-align: center;
-}
-
-.questionBtn button {
   background: #28a745;
   color: white;
   padding: 10px 15px;
@@ -127,7 +124,7 @@ select {
   cursor: pointer;
 }
 
-.questionBtn button:hover {
+.addques button:hover {
   background: #218838;
 }
 

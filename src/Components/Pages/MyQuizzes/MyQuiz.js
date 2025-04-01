@@ -105,16 +105,19 @@ const MyQuiz = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
+        <label htmlFor="category-select">Category:</label>
         <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
           {categories.map((category, index) => (
             <option key={index} value={category}>{category}</option>
           ))}
         </select>
+        <label htmlFor="difficulty-select">Difficulty:</label>
         <select value={selectedDifficulty} onChange={(e) => setSelectedDifficulty(e.target.value)}>
           {difficulties.map((difficulty, index) => (
             <option key={index} value={difficulty}>{difficulty}</option>
           ))}
         </select>
+
       </div>
 
       {/* Delete Confirmation Modal */}

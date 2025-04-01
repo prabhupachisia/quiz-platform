@@ -30,7 +30,6 @@ const NewQuizForm = () => {
 
   const addQuestionHandler = (e) => {
     e.preventDefault();
-    if (questionRef.current.value.length < 10) return;
 
     const options = optionRefs.map((ref) => ref.current.value.trim());
     if (options.some((opt) => opt === "")) return;
